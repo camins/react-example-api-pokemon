@@ -5,25 +5,36 @@ export const PokeInfo = styled.div`
     flex-direction: column;
     flex-wrap: wrap;
     justify-content: space-around;
-    align-items: center;
-    background: #f0f8ff;
+    align-items: flex-start;
     border-radius: 4px;
     padding: 0px 5px;
-    margin: 10px 10px;
+    margin: 20px 10px;
+    font-family: 'Flexo-Bold', arial, sans-serif;
 
     img {
         width: 150px;
+        background: #f0f8ff;
+        border-radius: 4px;
     }
 
     p {
-        color: red;
+        color: #919191;
+        line-height: 130%;
+        font-size: 80%;
+        padding-top: 2px;
+        font-weight: 800;
+        margin: 0.5em 0;
+    }
+
+    div {
+        padding-left: 7.2525%;
     }
 `;
 
 export const PokeFilter = styled.div`
     display: flex;
     flex-direction: row;
-    align-items: flex-start;
+    align-items: center;
     background: #313131;
     color: white;
     font-size: 20px;
@@ -73,6 +84,8 @@ export const SubmitButton = styled.button.attrs(props => ({
     type: 'submit',
 }))`
     background: #ee6b2f;
+    color: #fff;
+    font-size: 15px;
     border: 0;
     padding: 0 15px;
     margin-left: 10px;
@@ -89,5 +102,6 @@ export const PokedexResults = styled.div`
     flex-wrap: wrap;
     width: 800px;
     top: 0;
+    padding: 30px 20px;
     justify-content: center;
 `;

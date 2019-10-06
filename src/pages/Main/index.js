@@ -76,10 +76,12 @@ export default class Main extends Component {
                 <Container>
                     <PokedexResults>
                         {pokemons.map(pokemon => (
-                            <PokeInfo>
+                            <PokeInfo key={pokemon.data.id}>
                                 <img src={pokemon.data.sprites.front_default} />
-                                <p>Nº {pokemon.data.id}</p>
-                                <h1>{pokemon.data.name}</h1>
+                                <div>
+                                    <p>Nº {pokemon.data.id}</p>
+                                    <h1>{pokemon.data.name}</h1>
+                                </div>
                             </PokeInfo>
                         ))}
                     </PokedexResults>
