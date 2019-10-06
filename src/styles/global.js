@@ -13,14 +13,14 @@ export default createGlobalStyle`
   }
 
   body {
-    background: #7159c1;
     -webkit-font-smoothing: antialiased !important;
+    background: #424242 url('https://assets.pokemon.com/static2/_ui/img/chrome/body_bg.png');
   }
 
   body, input, button {
     color: #222;
     font-size: 14px;
-    font-family: Arial, Helvetica, sans-serif;
+    font-family: "Flexo-Regular",arial,sans-serif;
   }
 
   button {
