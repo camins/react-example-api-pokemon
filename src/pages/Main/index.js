@@ -9,7 +9,6 @@ import { PokeInfo, PokeFilter, SubmitButton, PokedexResults } from './styles';
 export default class Main extends Component {
     state = {
         pokemons: [],
-        newPoke: '',
         loading: false,
         search: '',
         offset: 0,
@@ -21,44 +20,60 @@ export default class Main extends Component {
     }
 
     loadPokemons = async () => {
-        const { search, offset, limit } = this.state;
+        const { search, offset, limit, pokemons } = this.state;
 
         const param = search
             ? 'pokemon/' + search
             : 'pokemon/?limit=' + limit + '&offset=' + offset;
         const result = await api.get(param);
 
-        if (result.data.results && result.data.results.length > 1) {
-            const promises = result.data.results.map(async result => {
-                result = await api.get(result.url);
-                return result;
-            });
-            const pokes = await Promise.all(promises);
-            console.log(pokes);
+        let pokes = []
 
-            this.setState({
-                pokemons: pokes,
-                search: '',
-            });
-        } else {
-            this.setState({
-                pokemons: result.data,
-                search: '',
-            });
+        if(result.data.results){
+
+            const poke = await Promise.all(
+                result.data.results.map(async result => {
+                result = await api.get(result.url);
+                return result.data;
+            }));
+
+            pokes.push(...pokemons, ...poke )
+
+        }else{
+            pokes.push(result.data)
         }
+
+        this.setState({
+            pokemons: pokes,
+            search: '',
+        });
+
     };
 
+    handleChange = (event) => {
+        this.setState({search: event.target.value});
+    }
+
+    handleSubmit = async (event) => {
+        event.preventDefault();
+        await this.loadPokemons()
+    }
+
     render() {
-        const { newPoke, pokemons } = this.state;
+        const { search, pokemons } = this.state;
+
+        if(!pokemons){
+            return ( <div> Pokemon não encontrado </div> )
+        }
 
         return (
             <>
                 <Header />
-                <PokeFilter>
+                <PokeFilter onSubmit={this.handleSubmit}>
                     <div className="search">
                         <h1>Nome ou Número</h1>
                         <div className="search-submit">
-                            <input type="input" value={newPoke} />
+                            <input type="input" value={search}  onChange={this.handleChange}/>
                             <SubmitButton>
                                 <FaSearch></FaSearch>
                             </SubmitButton>
@@ -76,11 +91,11 @@ export default class Main extends Component {
                 <Container>
                     <PokedexResults>
                         {pokemons.map(pokemon => (
-                            <PokeInfo key={pokemon.data.id}>
-                                <img src={pokemon.data.sprites.front_default} />
+                            <PokeInfo key={pokemon.id}>
+                                <img src={pokemon.sprites.front_default} alt=""/>
                                 <div>
-                                    <p>Nº {pokemon.data.id}</p>
-                                    <h1>{pokemon.data.name}</h1>
+                                    <p>Nº {pokemon.id}</p>
+                                    <h1>{pokemon.name}</h1>
                                 </div>
                             </PokeInfo>
                         ))}

@@ -1,8 +1,9 @@
 import styled from 'styled-components';
+import img from '../../assets/container_bg.png';
 
 const Container = styled.div`
     max-width: 1200px;
-    background-image: url('https://assets.pokemon.com/static2/_ui/img/chrome/container_bg.png');
+    background-image: url(${img});
     background-color: #fff;
     box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
     clear: both;

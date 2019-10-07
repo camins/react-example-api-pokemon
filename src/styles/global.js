@@ -1,4 +1,5 @@
 import { createGlobalStyle } from 'styled-components';
+import img from '../assets/body_bg.png'
 
 export default createGlobalStyle`
   *{
@@ -14,7 +15,7 @@ export default createGlobalStyle`
 
   body {
     -webkit-font-smoothing: antialiased !important;
-    background: #424242 url('https://assets.pokemon.com/static2/_ui/img/chrome/body_bg.png');
+    background: #424242 url(${img}) !important;
   }
 
   body, input, button {

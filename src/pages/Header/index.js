@@ -9,7 +9,7 @@ export default class Header extends Component {
         return (
             <H>
                 <Link to={`/`}>
-                    <img src={name} className="name" />
+                    <img src={name} className="name" alt=""/>
                 </Link>
             </H>
         );

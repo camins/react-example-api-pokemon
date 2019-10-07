@@ -31,7 +31,7 @@ export const PokeInfo = styled.div`
     }
 `;
 
-export const PokeFilter = styled.div`
+export const PokeFilter = styled.form`
     display: flex;
     flex-direction: row;
     align-items: center;
@@ -96,7 +96,7 @@ export const SubmitButton = styled.button.attrs(props => ({
 `;
 
 export const PokedexResults = styled.div`
-    background-color: #fff;
+    background-color: #bbbbbb96;
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
