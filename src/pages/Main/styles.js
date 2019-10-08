@@ -29,13 +29,22 @@ export const PokeInfo = styled.div`
     div {
         padding-left: 7.2525%;
     }
+
+    span {
+        font-size: 12px;
+        border-radius: 3px;
+        padding: 2px 15px;
+        margin: 0 5px 0 0;
+        font-weight: 200;
+        font-family: 'Flexo-Medium', arial, sans-serif;
+    }
 `;
 
 export const PokeFilter = styled.form`
     display: flex;
     flex-direction: row;
     align-items: center;
-    background: #313131;
+    background: linear-gradient(180deg, #313131 40%, #31313110);
     color: white;
     font-size: 20px;
     padding: 5px;

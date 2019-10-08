@@ -27,43 +27,43 @@ export default class Main extends Component {
             : 'pokemon/?limit=' + limit + '&offset=' + offset;
         const result = await api.get(param);
 
-        let pokes = []
+        let pokes = [];
 
-        if(result.data.results){
-
+        if (result.data.results) {
             const poke = await Promise.all(
                 result.data.results.map(async result => {
-                result = await api.get(result.url);
-                return result.data;
-            }));
+                    result = await api.get(result.url);
+                    return result.data;
+                })
+            );
 
-            pokes.push(...pokemons, ...poke )
-
-        }else{
-            pokes.push(result.data)
+            pokes.push(...pokemons, ...poke);
+        } else {
+            pokes.push(result.data);
         }
-
+        console.log(pokes);
         this.setState({
             pokemons: pokes,
             search: '',
         });
-
     };
 
-    handleChange = (event) => {
-        this.setState({search: event.target.value});
-    }
+    handleChange = event => {
+        this.setState({ search: event.target.value });
+    };
 
-    handleSubmit = async (event) => {
+    handleSubmit = async event => {
         event.preventDefault();
-        await this.loadPokemons()
-    }
+
+        await this.setState({ pokemons: [] });
+        await this.loadPokemons();
+    };
 
     render() {
         const { search, pokemons } = this.state;
 
-        if(!pokemons){
-            return ( <div> Pokemon não encontrado </div> )
+        if (!pokemons) {
+            return <div> Pokemon não encontrado </div>;
         }
 
         return (
@@ -73,7 +73,11 @@ export default class Main extends Component {
                     <div className="search">
                         <h1>Nome ou Número</h1>
                         <div className="search-submit">
-                            <input type="input" value={search}  onChange={this.handleChange}/>
+                            <input
+                                type="input"
+                                value={search}
+                                onChange={this.handleChange}
+                            />
                             <SubmitButton>
                                 <FaSearch></FaSearch>
                             </SubmitButton>
@@ -92,10 +96,21 @@ export default class Main extends Component {
                     <PokedexResults>
                         {pokemons.map(pokemon => (
                             <PokeInfo key={pokemon.id}>
-                                <img src={pokemon.sprites.front_default} alt=""/>
+                                <img
+                                    src={pokemon.sprites.front_default}
+                                    alt=""
+                                />
                                 <div>
                                     <p>Nº {pokemon.id}</p>
                                     <h1>{pokemon.name}</h1>
+                                    {pokemon.types.map(type => (
+                                        <span
+                                            key={type.type.name}
+                                            className={type.type.name}
+                                        >
+                                            {type.type.name}
+                                        </span>
+                                    ))}
                                 </div>
                             </PokeInfo>
                         ))}
