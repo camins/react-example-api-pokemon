@@ -17,6 +17,12 @@ export default class Main extends Component {
 
     async componentDidMount() {
         await this.loadPokemons();
+
+        window.addEventListener('scroll', this.handleScroll, true);
+    }
+
+    componentWillMount() {
+        window.removeEventListener('scroll', this.handleScroll);
     }
 
     loadPokemons = async () => {
@@ -46,6 +52,29 @@ export default class Main extends Component {
             pokemons: pokes,
             search: '',
         });
+    };
+
+    handleScroll = async () => {
+        var scrollTop =
+            (document.documentElement && document.documentElement.scrollTop) ||
+            document.body.scrollTop;
+        var scrollHeight =
+            (document.documentElement &&
+                document.documentElement.scrollHeight) ||
+            document.body.scrollHeight;
+        var clientHeight =
+            document.documentElement.clientHeight || window.innerHeight;
+        var scrolledToBottom =
+            Math.ceil(scrollTop + clientHeight) >= scrollHeight;
+
+        if (scrolledToBottom) {
+            const { offset, limit } = this.state;
+            await this.setState({
+                offset: offset + limit,
+                limit: 4,
+            });
+            setTimeout(await this.loadPokemons(), 4000);
+        }
     };
 
     handleChange = event => {

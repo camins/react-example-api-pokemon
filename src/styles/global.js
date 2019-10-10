@@ -29,83 +29,83 @@ export default createGlobalStyle`
   }
 
   .fire {
-        background: #fd7d24;
-        color: #fff;
-    }
+    background: #fd7d24;
+    color: #fff;
+  }
 
-    .grass {
-        background: #9bcc50;
-    }
+  .grass {
+    background: #9bcc50;
+  }
 
-    .poison {
-        background: #b97fc9;
-        color: #fff;
-    }
+  .poison {
+    background: #b97fc9;
+    color: #fff;
+  }
 
-    .water {
-        background: #b97fc9;
-        color: #fff;
-    }
+  .water {
+    background: #4592c4;
+    color: #fff;
+  }
 
-    .flying {
-        background: linear-gradient(180deg, #3dc7ef 50%, #bdb9b8 50%);
-    }
+  .flying {
+    background: linear-gradient(180deg, #3dc7ef 50%, #bdb9b8 50%);
+  }
 
-    .bug {
-        background: #729f3f;
-    }
+  .bug {
+    background: #729f3f;
+  }
 
-    .normal {
-        background: #a4acaf;
-    }
+  .normal {
+    background: #a4acaf;
+  }
 
-    .electric {
-        background: #eed535;
-    }
+  .electric {
+    background: #eed535;
+  }
 
-    .ground {
-        background: linear-gradient(180deg, #f7de3f 50%, #ab9842 50%);
-    }
+  .ground {
+    background: linear-gradient(180deg, #f7de3f 50%, #ab9842 50%);
+  }
 
-    .fairy {
-        background: #fdb9e9;
-    }
+  .fairy {
+    background: #fdb9e9;
+  }
 
-    .ghost {
-        background: #7b62a3;
-        color: #fff;
-    }
+  .ghost {
+    background: #7b62a3;
+    color: #fff;
+  }
 
-    .ice {
-        background: #51c4e7;
-    }
+  .ice {
+    background: #51c4e7;
+  }
 
-    .rock {
-        background: #a38c21;
-        color: #fff;
-    }
+  .rock {
+    background: #a38c21;
+    color: #fff;
+  }
 
-    .psychic {
-        background: #f366b9;
-        color: #fff;
-    }
+  .psychic {
+    background: #f366b9;
+    color: #fff;
+  }
 
-    .fighting {
-        background: #d56723;
-        color: #fff;
-    }
+  .fighting {
+    background: #d56723;
+    color: #fff;
+  }
 
-    .dragon {
-        background: linear-gradient(180deg, #53a4cf 50%, #f16e57 50%);
-        color: #fff;
-    }
+  .dragon {
+    background: linear-gradient(180deg, #53a4cf 50%, #f16e57 50%);
+    color: #fff;
+  }
 
-    .dark {
-        background: #707070;
-        color: #fff;
-    }
+  .dark {
+    background: #707070;
+    color: #fff;
+  }
 
-    .steel {
-        background: #9eb7b8;
-    }
+  .steel {
+    background: #9eb7b8;
+  }
 `;
