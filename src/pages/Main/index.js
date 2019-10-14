@@ -1,38 +1,37 @@
 import React, { Component } from 'react';
 
-import { FaSearch } from 'react-icons/fa';
+import { FaSearch, FaSpinner } from 'react-icons/fa';
+import { Link } from 'react-router-dom';
 import Container from '../../components/Container';
+import PokedexResults from '../../components/PokedexResult';
+import Loading from '../../components/Loading';
 import Header from '../Header';
 import api from '../../services/api';
-import { PokeInfo, PokeFilter, SubmitButton, PokedexResults } from './styles';
+import InfiniteScroll from 'react-infinite-scroller';
+import { PokeInfo, PokeFilter, SubmitButton } from './styles';
 
 export default class Main extends Component {
     state = {
         pokemons: [],
+        search_flag: false,
         loading: false,
         search: '',
         offset: 0,
         limit: 12,
+        hasMoreItems: true,
     };
 
     async componentDidMount() {
         await this.loadPokemons();
-
-        window.addEventListener('scroll', this.handleScroll, true);
-    }
-
-    componentWillMount() {
-        window.removeEventListener('scroll', this.handleScroll);
     }
 
     loadPokemons = async () => {
-        const { search, offset, limit, pokemons } = this.state;
+        const { search, pokemons, offset, limit } = this.state;
 
         const param = search
-            ? 'pokemon/' + search
-            : 'pokemon/?limit=' + limit + '&offset=' + offset;
+            ? `pokemon/${search}`
+            : `pokemon/?limit=${limit}&offset= ${offset}`;
         const result = await api.get(param);
-
         let pokes = [];
 
         if (result.data.results) {
@@ -47,34 +46,18 @@ export default class Main extends Component {
         } else {
             pokes.push(result.data);
         }
-        console.log(pokes);
+
+        const newOffset = search ? 0 : offset + limit;
+        const moreItems = newOffset >= 807 ? false : true;
+
         this.setState({
             pokemons: pokes,
             search: '',
+            offset: newOffset,
+            search_flag: search ? true : false,
+            loading: false,
+            hasMoreItems: moreItems,
         });
-    };
-
-    handleScroll = async () => {
-        var scrollTop =
-            (document.documentElement && document.documentElement.scrollTop) ||
-            document.body.scrollTop;
-        var scrollHeight =
-            (document.documentElement &&
-                document.documentElement.scrollHeight) ||
-            document.body.scrollHeight;
-        var clientHeight =
-            document.documentElement.clientHeight || window.innerHeight;
-        var scrolledToBottom =
-            Math.ceil(scrollTop + clientHeight) >= scrollHeight;
-
-        if (scrolledToBottom) {
-            const { offset, limit } = this.state;
-            await this.setState({
-                offset: offset + limit,
-                limit: 4,
-            });
-            setTimeout(await this.loadPokemons(), 4000);
-        }
     };
 
     handleChange = event => {
@@ -84,16 +67,64 @@ export default class Main extends Component {
     handleSubmit = async event => {
         event.preventDefault();
 
-        await this.setState({ pokemons: [] });
+        await this.setState({
+            pokemons: [],
+            loading: true,
+        });
         await this.loadPokemons();
     };
 
     render() {
-        const { search, pokemons } = this.state;
+        const {
+            search,
+            pokemons,
+            search_flag,
+            loading,
+            hasMoreItems,
+        } = this.state;
+        const loader = (
+            <PokedexResults>
+                <Loading>
+                    <FaSpinner color="#696969" size={30} />
+                </Loading>
+            </PokedexResults>
+        );
 
-        if (!pokemons) {
-            return <div> Pokemon não encontrado </div>;
-        }
+        var items = [];
+        pokemons.map(pokemon => {
+            items.push(
+                <PokeInfo key={pokemon.id}>
+                    <Link to={`/pokemon/${encodeURIComponent(pokemon.name)}`}>
+                        <img
+                            src={pokemon.sprites.front_default}
+                            alt="pokemon"
+                        />
+                    </Link>
+                    <div>
+                        <p>Nº {pokemon.id}</p>
+                        <h1>
+                            {pokemon.name.replace(/(?:^|\s)\S/g, function(a) {
+                                return a.toUpperCase();
+                            })}
+                        </h1>
+                        {pokemon.types.map(type => (
+                            <span
+                                key={type.type.name}
+                                className={type.type.name}
+                            >
+                                {type.type.name}
+                            </span>
+                        ))}
+                    </div>
+                </PokeInfo>
+            );
+        });
+
+        const isLoading = loading ? (
+            loader
+        ) : (
+            <PokedexResults> {items} </PokedexResults>
+        );
 
         return (
             <>
@@ -122,28 +153,18 @@ export default class Main extends Component {
                     </h2>
                 </PokeFilter>
                 <Container>
-                    <PokedexResults>
-                        {pokemons.map(pokemon => (
-                            <PokeInfo key={pokemon.id}>
-                                <img
-                                    src={pokemon.sprites.front_default}
-                                    alt=""
-                                />
-                                <div>
-                                    <p>Nº {pokemon.id}</p>
-                                    <h1>{pokemon.name}</h1>
-                                    {pokemon.types.map(type => (
-                                        <span
-                                            key={type.type.name}
-                                            className={type.type.name}
-                                        >
-                                            {type.type.name}
-                                        </span>
-                                    ))}
-                                </div>
-                            </PokeInfo>
-                        ))}
-                    </PokedexResults>
+                    {search_flag ? (
+                        isLoading
+                    ) : (
+                        <InfiniteScroll
+                            pageStart={0}
+                            loadMore={this.loadPokemons.bind(this)}
+                            hasMore={hasMoreItems}
+                            loader={loader}
+                        >
+                            <PokedexResults>{items}</PokedexResults>
+                        </InfiniteScroll>
+                    )}
                 </Container>
             </>
         );

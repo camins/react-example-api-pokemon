@@ -13,7 +13,6 @@ const Container = styled.div`
     justify-content: center;
 
     h1 {
-        font-size: 20px;
         align-items: center;
         svg {
             margin-right: 10px;
