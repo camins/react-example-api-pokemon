@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 
 const PokedexResults = styled.div`
-    background-color: #bbbbbb96;
+    background-color: #fff;
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;

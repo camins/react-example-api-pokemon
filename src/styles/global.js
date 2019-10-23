@@ -21,7 +21,7 @@ export default createGlobalStyle`
   body, input, button {
     color: #222;
     font-size: 14px;
-    font-family: "Flexo-Regular",arial,sans-serif;
+    font-family: "FlexoW01-Regular",arial,sans-serif;
   }
 
   button {

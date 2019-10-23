@@ -11,19 +11,18 @@ export const PokeInfo = styled.div`
     border-radius: 4px;
     padding: 0px 5px;
     margin: 20px 10px;
-    font-family: 'Flexo-Bold', arial, sans-serif;
+    font-family: 'FlexoW01-Bold', arial, sans-serif;
+    position: relative;
 
     a > img {
         width: 150px;
         background: #fff;
         border-radius: 6px;
-
+        box-shadow: 1px 1px 10px 0 rgba(0, 0, 0, 0.1);
         :hover {
-            width: 170%;
+            box-shadow: 10px 15px 25px 0 rgba(0, 0, 0, 0.2);
             border: 3px solid #616161;
-            position: relative;
-            top: -5px;
-            left: -10px;
+            cursor: pointer;
         }
     }
 
@@ -40,12 +39,15 @@ export const PokeInfo = styled.div`
         padding-left: 7.2525%;
     }
 
+    h1 {
+        margin-bottom: 5px;
+    }
+
     span {
         border-radius: 3px;
         padding: 2px 15px;
         margin: 0 5px 0 0;
         font-weight: 200;
-        font-family: 'Flexo-Medium', arial, sans-serif;
     }
 `;
 

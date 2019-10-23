@@ -92,32 +92,53 @@ export default class Main extends Component {
 
         var items = [];
         pokemons.map(pokemon => {
-            items.push(
-                <PokeInfo key={pokemon.id}>
-                    <Link to={`/pokemon/${encodeURIComponent(pokemon.name)}`}>
-                        <img
-                            src={pokemon.sprites.front_default}
-                            alt="pokemon"
-                        />
-                    </Link>
-                    <div>
-                        <p>Nº {pokemon.id}</p>
-                        <h1>
-                            {pokemon.name.replace(/(?:^|\s)\S/g, function(a) {
-                                return a.toUpperCase();
-                            })}
-                        </h1>
-                        {pokemon.types.map(type => (
-                            <span
-                                key={type.type.name}
-                                className={type.type.name}
-                            >
-                                {type.type.name}
-                            </span>
-                        ))}
-                    </div>
-                </PokeInfo>
-            );
+            pokemon.id <= 807 &&
+                items.push(
+                    <PokeInfo key={pokemon.id}>
+                        <Link
+                            to={`/pokemon/${encodeURIComponent(pokemon.name)}`}
+                        >
+                            <img
+                                src={`https://assets.pokemon.com/assets/cms2/img/pokedex/detail/${pokemon.id
+                                    .toString()
+                                    .replace(/\d+/g, function(x) {
+                                        if (x.length === 1) return '00' + x;
+                                        else if (x.length === 2) return '0' + x;
+                                        else return x;
+                                    })}.png`}
+                                alt="pokemon"
+                            />
+                        </Link>
+                        <div>
+                            <p>
+                                {' '}
+                                Nº{' '}
+                                {pokemon.id
+                                    .toString()
+                                    .replace(/\d+/g, function(x) {
+                                        if (x.length === 1) return '00' + x;
+                                        else if (x.length === 2) return '0' + x;
+                                        else return x;
+                                    })}
+                            </p>
+                            <h1>
+                                {pokemon.name.replace(/(?:^|\s)\S/g, function(
+                                    a
+                                ) {
+                                    return a.toUpperCase();
+                                })}
+                            </h1>
+                            {pokemon.types.map(type => (
+                                <span
+                                    key={type.type.name}
+                                    className={type.type.name}
+                                >
+                                    {type.type.name}
+                                </span>
+                            ))}
+                        </div>
+                    </PokeInfo>
+                );
         });
 
         const isLoading = loading ? (
