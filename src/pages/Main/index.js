@@ -40,9 +40,7 @@ export default class Main extends Component {
         }
         let pokes = [];
 
-        console.log(result);
         if (result && result.data) {
-            console.log('errado');
             if (result.data.results) {
                 const poke = await Promise.all(
                     result.data.results.map(async result => {
@@ -204,7 +202,7 @@ export default class Main extends Component {
                             hasMore={hasMoreItems}
                             loader={loader}
                         >
-                            <PokedexResults>{items}</PokedexResults>
+                            <PokedexResults key={0}>{items}</PokedexResults>
                         </InfiniteScroll>
                     )}
                 </Container>

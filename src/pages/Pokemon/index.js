@@ -20,7 +20,6 @@ export default class Pokemon extends Component {
 
     async componentDidMount() {
         const { match } = this.props;
-        console.log(match);
         const [pokemon, pokemonSpecie] = await Promise.all([
             api.get(`/pokemon/${match.params.pokemon}`),
             api.get(`/pokemon-species/${match.params.pokemon}`),
@@ -87,7 +86,7 @@ export default class Pokemon extends Component {
             let numberEvolutions = evolution_data.evolves_to.length;
 
             items.push(
-                <div className="details">
+                <div className="details" key={specie_id}>
                     <a
                         href={`/pokemon/${encodeURIComponent(
                             evolution_data.species.name
@@ -127,7 +126,7 @@ export default class Pokemon extends Component {
                         });
 
                     items.push(
-                        <div className="details">
+                        <div className="details" key={specie_id}>
                             <a
                                 href={`/pokemon/${encodeURIComponent(
                                     evolution_data.evolves_to[i].species.name
@@ -162,7 +161,13 @@ export default class Pokemon extends Component {
             }
 
             if (evolution_data) {
-                items.push(<FaChevronRight color="#FFF" size={55} />);
+                items.push(
+                    <FaChevronRight
+                        key={specie_id + 1}
+                        color="#FFF"
+                        size={55}
+                    />
+                );
             }
         } while (evolution_data);
 

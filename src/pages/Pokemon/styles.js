@@ -120,7 +120,7 @@ export const PokeInfo = styled.div`
             flex-direction: row;
             flex-wrap: wrap;
             align-items: center;
-            justify-content: flex-end;
+            justify-content: center;
             font-family: 'FlexoW01-Regular', arial, sans-serif;
             width: 800px;
 
