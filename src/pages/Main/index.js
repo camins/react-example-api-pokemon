@@ -18,6 +18,7 @@ export default class Main extends Component {
         search: '',
         offset: 0,
         limit: 12,
+        error: false,
         hasMoreItems: true,
     };
 
@@ -28,23 +29,32 @@ export default class Main extends Component {
     loadPokemons = async () => {
         const { search, pokemons, offset, limit } = this.state;
 
-        const param = search
-            ? `pokemon/${search}`
-            : `pokemon/?limit=${limit}&offset= ${offset}`;
-        const result = await api.get(param);
+        let result, err;
+        try {
+            const param = search
+                ? `pokemon/${search}`
+                : `pokemon/?limit=${limit}&offset= ${offset}`;
+            result = await api.get(param);
+        } catch (e) {
+            err = true;
+        }
         let pokes = [];
 
-        if (result.data.results) {
-            const poke = await Promise.all(
-                result.data.results.map(async result => {
-                    result = await api.get(result.url);
-                    return result.data;
-                })
-            );
+        console.log(result);
+        if (result && result.data) {
+            console.log('errado');
+            if (result.data.results) {
+                const poke = await Promise.all(
+                    result.data.results.map(async result => {
+                        result = await api.get(result.url);
+                        return result.data;
+                    })
+                );
 
-            pokes.push(...pokemons, ...poke);
-        } else {
-            pokes.push(result.data);
+                pokes.push(...pokemons, ...poke);
+            } else {
+                pokes.push(result.data);
+            }
         }
 
         const newOffset = search ? 0 : offset + limit;
@@ -57,6 +67,7 @@ export default class Main extends Component {
             search_flag: search ? true : false,
             loading: false,
             hasMoreItems: moreItems,
+            error: err,
         });
     };
 
@@ -81,12 +92,20 @@ export default class Main extends Component {
             search_flag,
             loading,
             hasMoreItems,
+            error,
         } = this.state;
+
         const loader = (
             <PokedexResults>
                 <Loading>
                     <FaSpinner color="#696969" size={30} />
                 </Loading>
+            </PokedexResults>
+        );
+
+        const err = (
+            <PokedexResults>
+                <div>Nenhum registro foi encontrado</div>
             </PokedexResults>
         );
 
@@ -174,7 +193,9 @@ export default class Main extends Component {
                     </h2>
                 </PokeFilter>
                 <Container>
-                    {search_flag ? (
+                    {error ? (
+                        err
+                    ) : search_flag ? (
                         isLoading
                     ) : (
                         <InfiniteScroll

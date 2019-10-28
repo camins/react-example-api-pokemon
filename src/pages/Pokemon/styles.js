@@ -1,4 +1,5 @@
 import styled from 'styled-components';
+import img from '../../assets/container_bg.png';
 
 export const PokeInfo = styled.div`
     display: flex;
@@ -88,8 +89,73 @@ export const PokeInfo = styled.div`
     }
 
     .chart {
-        svg {
-            background: #a4a4a424;
+        background: #a4a4a424;
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        margin: 20px;
+
+        h1 {
+            padding: 10px;
+            margin-left: 60px;
+        }
+    }
+
+    .evolutions {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        background: #424242 url(${img}) !important;
+        border-radius: 20px;
+        padding: 10px;
+        margin: 50px 30px;
+
+        h1 {
+            color: #fff;
+            padding: 30px 0px 0px 30px;
+        }
+
+        .pokemons {
+            display: flex;
+            flex-direction: row;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: flex-end;
+            font-family: 'FlexoW01-Regular', arial, sans-serif;
+            width: 800px;
+
+            .details {
+                margin-top: 30px;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+
+                a {
+                    display: contents;
+                }
+
+                a > img {
+                    background-color: #616161;
+                    border: 5px solid #fff;
+                    border-radius: 50%;
+                    box-shadow: 0 4px 4px 0px #212121;
+                    width: 70%;
+                }
+
+                .match {
+                    display: flex;
+                    flex-direction: row;
+                    font-size: 20px;
+                    margin: 0.75em 0;
+                    text-align: center;
+                    color: #fff;
+
+                    span {
+                        color: #a4acaf;
+                        padding: 0px 5px;
+                    }
+                }
+            }
         }
     }
 `;

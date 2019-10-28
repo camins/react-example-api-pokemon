@@ -5,7 +5,7 @@ const PokedexResults = styled.div`
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
-    width: 800px;
+    width: 850px;
     top: 0;
     padding: 30px 20px;
     justify-content: center;

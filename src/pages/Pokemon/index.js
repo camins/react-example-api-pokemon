@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import Container from '../../components/Container';
 import Loading from '../../components/Loading';
 import PokedexResults from '../../components/PokedexResult';
-import { FaSpinner } from 'react-icons/fa';
+import { FaSpinner, FaChevronRight } from 'react-icons/fa';
 import { IoMdFemale, IoMdMale } from 'react-icons/io';
 import api from '../../services/api';
 import Header from '../Header';
@@ -13,19 +13,20 @@ export default class Pokemon extends Component {
     state = {
         pokemon: {},
         pokemonSpecie: {},
-        evolution: {},
+        evolutions: {},
         loading: true,
-        data: [],
+        dataGraph: [],
     };
 
     async componentDidMount() {
         const { match } = this.props;
+        console.log(match);
         const [pokemon, pokemonSpecie] = await Promise.all([
             api.get(`/pokemon/${match.params.pokemon}`),
             api.get(`/pokemon-species/${match.params.pokemon}`),
         ]);
 
-        const data = pokemon.data.stats.map(stat => {
+        const dataGraph = pokemon.data.stats.map(stat => {
             return {
                 stat: stat.stat.name
                     .replace('-', ' ')
@@ -36,19 +37,27 @@ export default class Pokemon extends Component {
             };
         });
 
-        const evolution = await api.get(pokemonSpecie.data.evolution_chain.url);
+        const evolution_chain = await api.get(
+            pokemonSpecie.data.evolution_chain.url
+        );
 
         this.setState({
             pokemon: pokemon.data,
             pokemonSpecie: pokemonSpecie.data,
-            evolution: evolution.data.chain,
+            evolutions: evolution_chain.data.chain,
             loading: false,
-            data,
+            dataGraph,
         });
     }
 
     render() {
-        const { pokemon, pokemonSpecie, loading, data, evolution } = this.state;
+        const {
+            pokemon,
+            pokemonSpecie,
+            loading,
+            dataGraph,
+            evolutions,
+        } = this.state;
 
         if (loading) {
             return (
@@ -61,6 +70,101 @@ export default class Pokemon extends Component {
                 </Container>
             );
         }
+
+        var items = [];
+        let evolution_data = evolutions;
+
+        do {
+            let n = evolution_data.species.url.search(/[\d\/]*$/);
+            let specie_id = evolution_data.species.url
+                .substring(n + 1, evolution_data.species.url.length - 1)
+                .replace(/\d+/g, function(x) {
+                    if (x.length === 1) return '00' + x;
+                    else if (x.length === 2) return '0' + x;
+                    else return x;
+                });
+
+            let numberEvolutions = evolution_data.evolves_to.length;
+
+            items.push(
+                <div className="details">
+                    <a
+                        href={`/pokemon/${encodeURIComponent(
+                            evolution_data.species.name
+                        )}`}
+                    >
+                        <img
+                            src={`https://assets.pokemon.com/assets/cms2/img/pokedex/detail/${specie_id}.png`}
+                            alt="pokemon"
+                        />
+                    </a>
+                    <div className="match">
+                        <p>
+                            {evolution_data.species.name.replace(
+                                /(?:^|\s)\S/g,
+                                function(a) {
+                                    return a.toUpperCase();
+                                }
+                            )}
+                        </p>
+                        <span>{specie_id}</span>
+                    </div>
+                </div>
+            );
+
+            if (numberEvolutions > 1) {
+                items.push(<FaChevronRight color="#FFF" size={55} />);
+                for (let i = 0; i < numberEvolutions; i++) {
+                    n = evolution_data.evolves_to[i].species.url.search(
+                        /[\d\/]*$/
+                    );
+                    specie_id = evolution_data.evolves_to[i].species.url
+                        .substring(n + 1, evolution_data.species.url.length - 1)
+                        .replace(/\d+/g, function(x) {
+                            if (x.length === 1) return '00' + x;
+                            else if (x.length === 2) return '0' + x;
+                            else return x;
+                        });
+
+                    items.push(
+                        <div className="details">
+                            <a
+                                href={`/pokemon/${encodeURIComponent(
+                                    evolution_data.evolves_to[i].species.name
+                                )}`}
+                            >
+                                <img
+                                    src={`https://assets.pokemon.com/assets/cms2/img/pokedex/detail/${specie_id}.png`}
+                                    alt="pokemon"
+                                />
+                            </a>
+                            <div className="match">
+                                <p>
+                                    {evolution_data.evolves_to[
+                                        i
+                                    ].species.name.replace(
+                                        /(?:^|\s)\S/g,
+                                        function(a) {
+                                            return a.toUpperCase();
+                                        }
+                                    )}
+                                </p>
+                                <span>{specie_id}</span>
+                            </div>
+                        </div>
+                    );
+                }
+            }
+            if (numberEvolutions > 1) {
+                evolution_data = false;
+            } else {
+                evolution_data = evolution_data.evolves_to[0];
+            }
+
+            if (evolution_data) {
+                items.push(<FaChevronRight color="#FFF" size={55} />);
+            }
+        } while (evolution_data);
 
         return (
             <>
@@ -126,7 +230,7 @@ export default class Pokemon extends Component {
                                             )}
                                             <h1>Abilities</h1>
                                             {pokemon.abilities.map(ability => (
-                                                <p key={ability.name}>
+                                                <p key={ability.ability.name}>
                                                     {ability.ability.name.replace(
                                                         /(?:^|\s)\S/g,
                                                         function(a) {
@@ -138,7 +242,7 @@ export default class Pokemon extends Component {
                                         </div>
                                     </div>
                                     <div className="type">
-                                        <h1>Type:</h1>
+                                        <h1>Type</h1>
                                         {pokemon.types.map(type => (
                                             <span
                                                 key={type.type.name}
@@ -151,10 +255,11 @@ export default class Pokemon extends Component {
                                 </div>
                             </div>
                             <div className="chart">
+                                <h1>Stats</h1>
                                 <BarChart
                                     width={800}
                                     height={300}
-                                    data={data}
+                                    data={dataGraph}
                                     margin={{
                                         top: 5,
                                         right: 30,
@@ -173,7 +278,10 @@ export default class Pokemon extends Component {
                                 </BarChart>
                             </div>
 
-                            <div className="evolutions"></div>
+                            <div className="evolutions">
+                                <h1>Evolutions</h1>
+                                <div className="pokemons">{items}</div>
+                            </div>
                         </PokeInfo>
                     </PokedexResults>
                 </Container>
