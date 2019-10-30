@@ -9,4 +9,4 @@ To begin with, the following steps should be followed:
 * Run `yarn install`
 * Run `yarn start` 
 
-![Demo](https://j.gifs.com/D1WpY6.gif "Demo")
+![Demo](https://media.giphy.com/media/f4IDjkRnGlEHfdWno8/giphy.gif)
